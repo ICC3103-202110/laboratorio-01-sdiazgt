@@ -22,9 +22,9 @@ def Creat_list(cards):
         for j in range(number):
             Real[i].append(mix[0])
             mix.pop(0)
-    print(visual)
     print(Real)
-    return [visual,Real]
+    print("↑↑↑↑↑Only use for Testing and Checking↑↑↑↑↑\n") #This print can be erase, but it can help cheking if
+    return [visual,Real]                         #the location are working properly.
 
 # board_print is use to print the board when is asked
 def board_print(in_use_board):
@@ -43,10 +43,8 @@ def board_print(in_use_board):
 
 # turn_around receives the selected location and "flips" a card
 def turn_around(list_i,position):
-    real = list_i[1]
-    print(real)
+    real = list_i[1]   
     cencored = list_i[0]
-    print(cencored)
     x = int(position.split(sep=',')[0])
     y = int(position.split(sep=',')[1])
     if cencored[x][y] == " ": # if you select a "blank" location
