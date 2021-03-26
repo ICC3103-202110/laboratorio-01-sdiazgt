@@ -1,153 +1,156 @@
 import random
-def crear_lista(cartas):
-    numero = cartas
-    #lista visual, solo aparecen datos censurados
-    visual =[]
+# Creat_list creats the board that will be use in the game
+def Creat_list(cards):
+    number = cards
+    visual =[] #visual will contain only the "#" symbol
     for i in range(2):
         visual.append([])
-        for j in range(numero):
+        for j in range(number):
             visual[i].append("#")
-    #Mezclador de listas   
-    mezclar = []
-    for i in range(numero+1):
-        if i > 0:
-            mezclar.append(i)
-            mezclar.append(i)
-    random.shuffle(mezclar)
     
-    #lista real, se encuentran todos los datos ocultos en orden
+    mix = [] #mix will add all the numbers to a list and mix them
+    for i in range(number+1):
+        if i > 0:
+            mix.append(i)
+            mix.append(i)
+    random.shuffle(mix)
+    
+    # Real will have the same shape as visual but with the numbers of mix
     Real = []
     for i in range(2):
         Real.append([])
-        for j in range(numero):
-            Real[i].append(mezclar[0])
-            mezclar.pop(0)
+        for j in range(number):
+            Real[i].append(mix[0])
+            mix.pop(0)
     print(visual)
     print(Real)
     return [visual,Real]
 
-def imprimir(tablero):
-    tabla= tablero
-    for i in range(len(tabla)):
+# board_print is use to print the board when is asked
+def board_print(in_use_board):
+    board= in_use_board
+    for i in range(len(board)):
         print(" ",i, end="") 
         
     print(" ")
     print("")
     x=0
-    for a in zip(*tabla):         #Zip() fue sacado de Stackoverflow
+    for a in zip(*board):   #Zip() prints the list in a vertical way
         print(x,end="  ")
         print(" ".join(map(str, a)))
         x += 1
     return
 
-def dar_vuelta(lista,posicion):
-    real = lista[1]
+# turn_around receives the selected location and "flips" a card
+def turn_around(list_i,position):
+    real = list_i[1]
     print(real)
-    censura = lista[0]
-    print(censura)
-    x = int(posicion.split(sep=',')[0])
-    y = int(posicion.split(sep=',')[1])
-    if censura[x][y] == " ":
-        reint = input("Elija una casilla nueva: ")
-        lista1 = lista
-        dar_vuelta(lista1,reint)
-    censura[x][y] = real[x][y]
-    imprimir(censura)
-    return censura
+    cencored = list_i[0]
+    print(cencored)
+    x = int(position.split(sep=',')[0])
+    y = int(position.split(sep=',')[1])
+    if cencored[x][y] == " ": # if you select a "blank" location
+        reint = input("Select a new Location ")
+        list_i1 = list_i
+        turn_around(list_i1,reint)
+    cencored[x][y] = real[x][y]
+    board_print(cencored)
+    return cencored
 
-def verificar(tabla,n1,n2):
-    tab = tabla
-    puntaje = 0
+# Verification verifies the flip numbers are the same
+#and gives the signal to give a point
+def verification(board,n1,n2):
+    tab = board
+    points = 0
     x1 = int(n1.split(sep=',')[0])
     y1 = int(n1.split(sep=',')[1])
     x2 = int(n2.split(sep=',')[0])
     y2 = int(n2.split(sep=',')[1])
     if int(tab[x1][y1]) == int(tab[x2][y2]):
-        print("\nSon iguales")
+        print("\nYou found a pair")
         tab[x1][y1] = " "
         tab[x2][y2] = " "
-        puntaje = 1
-        return [tab, puntaje]
+        points = 1
+        return [tab, points]
     else:
-        print("\nNo son iguales")
+        print("\nThey are not the same")
         tab[x1][y1] = "#"
         tab[x2][y2] = "#"
-        puntaje = 0
-        return [tab,puntaje]
+        points = 0
+        return [tab,points]
 
 
 
 
-activo = 0
-jugador1 = 0
-jugador2 = 0
+active = 0
+player1 = 0
+player2 = 0
 xx = ""
 yy = ""
 x1 = ""
 x2 = ""
 y1 = ""
 y2 = ""
-sumar = []
-turno = 0
+add = []
+turn = 0
 total = 0
-cartas = int(input("cuantas cartas quieres: "))
-crear = crear_lista(cartas)
-while activo == 0:
-    if total == cartas:
-        print("Se termino el juego")
-        if jugador1 > jugador2:
-            print("Gano el jugador 1 con %s puntos"% (jugador1))
-        elif jugador1 < jugador2:
-            print("Gano el jugador 1 con %s puntos"% (jugador1))
-        elif jugador1 == jugador2:
-            print("Fue un Empate")
+cards = int(input("How many cards do you want?: "))
+creat = Creat_list(cards)
+while active == 0:
+    if total == cards:
+        print("The game is over")
+        if player1 > player2:
+            print("Player 1 won with %s points"% (player1))
+        elif player1 < player2:
+            print("Player 2 won with %s points"% (player1))
+        elif player1 == player2:
+            print("DRAW")
         break
-    elif turno == 0:
-        imprimir(crear[0])
-        print("\nJugador 1 es tu turno!")
-        xx = str(input("ingrese la cordenada en el Formato x,y (Ej. 1,1 es la primera):")) #primera posicion
-        crear[0] = dar_vuelta(crear,xx)
-        yy = str(input("ingrese la segunda cordenada en el Formato x,y (Ej. 1,1 es la primera):"))
-        crear[0] = dar_vuelta(crear,yy)
+    elif turn == 0:
+        board_print(creat[0])
+        print("\nPlayer 1 is your turn! ")
+        xx = str(input("Select a coordinate using the format x,y (Ej. 0,0 is the first card):"))
+        creat[0] = turn_around(creat,xx)
+        yy = str(input("Select a Second coordinate using the format x,y (Ej. 0,0 is the first card):"))
+        creat[0] = turn_around(creat,yy)
         if xx == yy:
             x1 = int(xx.split(sep=',')[0])
             y1 = int(xx.split(sep=',')[1])
             x2 = int(yy.split(sep=',')[0])
             y2 = int(yy.split(sep=',')[1])
-            crear[0][x1][y1] = "#"
-            crear[0][x2][y2] = "#"
-            print("No se puede eleguir la misma posicion")
+            creat[0][x1][y1] = "#"
+            creat[0][x2][y2] = "#"
+            print("\nYou can't select the same position")
             continue
-        sumar = verificar(crear[0],xx,yy)
-        crear[0] = sumar[0]
-        if int(sumar[1]) == 1:
-            jugador1 += 1
+        add = verification(creat[0],xx,yy)
+        creat[0] = add[0]
+        if int(add[1]) == 1:
+            player1 += 1
             total += 1
-            turno = 0
-            print("Jugador 1 Ganaste un punto")
-            print("Tienes %s puntos en total" % (jugador1))
-        elif int(sumar[1]) == 0:
-            turno = 1
-    elif total == cartas:
-        print("Se termino el juego")
-        break
-    elif turno == 1:
-        imprimir(crear[0])
-        print("\nJugador 2 es tu turno!")
-        xx = str(input("ingrese la cordenada en el Formato x,y (Ej. 1,1 es la primera):")) #primera posicion
-        crear[0] = dar_vuelta(crear,xx)
-        yy = str(input("ingrese la segunda cordenada en el Formato x,y (Ej. 1,1 es la primera):")) #segunda posicion
-        crear[0] = dar_vuelta(crear,yy)
-        sumar = verificar(crear[0],xx,yy)
-        crear[0] = sumar[0]
-        if int(sumar[1]) == 1:
-            jugador2 += 1
+            turn = 0
+            print("Player 1 you won a point")
+            print("You have %s points in total" % (player1))
+        elif int(add[1]) == 0:
+            turn = 1
+    elif total == cards:
+        continue
+    elif turn == 1:
+        board_print(creat[0])
+        print("\nPlayer 2 is your turn! ")
+        xx = str(input("Select a coordinate using the format x,y (Ej. 0,0 is the first card):"))
+        creat[0] = turn_around(creat,xx)
+        yy = str(input("Select a Second coordinate using the format x,y (Ej. 0,0 is the first card):"))
+        creat[0] = turn_around(creat,yy)
+        add = verification(creat[0],xx,yy)
+        creat[0] = add[0]
+        if int(add[1]) == 1:
+            player2 += 1
             total += 1
-            turno = 1
-            print("Jugador 2 Ganaste un punto")
-            print("Tienes %s puntos en total" % (jugador2))
-        elif int(sumar[1]) == 0:
-            turno = 0
+            turn = 1
+            print("Player 2 you won a point")
+            print("You have %s points in total" % (player2))
+        elif int(add[1]) == 0:
+            turn = 0
 
 
     
