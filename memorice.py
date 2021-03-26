@@ -47,10 +47,11 @@ def dar_vuelta(lista,posicion):
     print(censura)
     x = int(posicion.split(sep=',')[0])
     y = int(posicion.split(sep=',')[1])
-    #if censura[x-1][y-1] != "#" or " ":
-        #reint = input("Elija una casilla nueva: ")
-        #dar_vuelta(lista,reint)
-    censura[x-1][y-1] = real[x-1][y-1]
+    if censura[x][y] == " ":
+        reint = input("Elija una casilla nueva: ")
+        lista1 = lista
+        dar_vuelta(lista1,reint)
+    censura[x][y] = real[x][y]
     imprimir(censura)
     return censura
 
@@ -61,16 +62,16 @@ def verificar(tabla,n1,n2):
     y1 = int(n1.split(sep=',')[1])
     x2 = int(n2.split(sep=',')[0])
     y2 = int(n2.split(sep=',')[1])
-    if int(tab[x1-1][y1-1]) == int(tab[x2-1][y2-1]):
+    if int(tab[x1][y1]) == int(tab[x2][y2]):
         print("\nSon iguales")
-        tab[x1-1][y1-1] = " "
-        tab[x2-1][y2-1] = " "
+        tab[x1][y1] = " "
+        tab[x2][y2] = " "
         puntaje = 1
         return [tab, puntaje]
     else:
         print("\nNo son iguales")
-        tab[x1-1][y1-1] = "#"
-        tab[x2-1][y2-1] = "#"
+        tab[x1][y1] = "#"
+        tab[x2][y2] = "#"
         puntaje = 0
         return [tab,puntaje]
 
@@ -82,6 +83,10 @@ jugador1 = 0
 jugador2 = 0
 xx = ""
 yy = ""
+x1 = ""
+x2 = ""
+y1 = ""
+y2 = ""
 sumar = []
 turno = 0
 total = 0
@@ -104,6 +109,15 @@ while activo == 0:
         crear[0] = dar_vuelta(crear,xx)
         yy = str(input("ingrese la segunda cordenada en el Formato x,y (Ej. 1,1 es la primera):"))
         crear[0] = dar_vuelta(crear,yy)
+        if xx == yy:
+            x1 = int(xx.split(sep=',')[0])
+            y1 = int(xx.split(sep=',')[1])
+            x2 = int(yy.split(sep=',')[0])
+            y2 = int(yy.split(sep=',')[1])
+            crear[0][x1][y1] = "#"
+            crear[0][x2][y2] = "#"
+            print("No se puede eleguir la misma posicion")
+            continue
         sumar = verificar(crear[0],xx,yy)
         crear[0] = sumar[0]
         if int(sumar[1]) == 1:
@@ -136,4 +150,4 @@ while activo == 0:
             turno = 0
 
 
-        
+    
